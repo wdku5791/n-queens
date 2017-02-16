@@ -198,10 +198,6 @@
       var counter = 0;
 
       for (var i = 0; i < board.length - (Math.abs(board.length - 1 - (columnIndex + rowIndex))); i++) {
-        var x = (board.length - (Math.abs(board.length - 1 - (columnIndex + rowIndex))));
-        var y = (board[rowIndex + i][columnIndex - i]);
-        console.log(x);
-        console.log(y);
         if (board[rowIndex + i][columnIndex - i] === 1) {
           counter++;
         }

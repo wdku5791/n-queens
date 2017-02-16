@@ -74,17 +74,26 @@ window.findNQueensSolution = function(n) {
   var solution = []; //fixme
   var boardObj = new Board({'n': n });
   var board = boardObj.rows();
+  var solutionFound = false;
 
   var rooks = function (board, rooksLeft, rowIndex) {
+    solutionLength = solution.length;
     if (rowIndex === n ) {
-      var answer = board.slice();
-      solution.push(answer);
+      if (!(boardObj.hasAnyRowConflicts() || boardObj.hasAnyColConflicts() || boardObj.hasAnyMajorDiagonalConflicts() || boardObj.hasAnyMinorDiagonalConflicts())) {
+        var answer = board.slice();
+        solution.push(answer);
+        solutionFound = true;
+        return;
+      }
     } else {
       for (var i = 0; i < board.length; i++) {
         //var tempBoard = board.slice();
         board[rowIndex][i] = 1;
         if (!(boardObj.hasAnyRowConflicts() || boardObj.hasAnyColConflicts() || boardObj.hasAnyMajorDiagonalConflicts() || boardObj.hasAnyMinorDiagonalConflicts())) {
           rooks(board, rooksLeft, rowIndex + 1);
+          if (!(solutionFound)) {
+            board[rowIndex][i] = 0;
+          }
         } else {
           board[rowIndex][i] = 0;
         }
@@ -92,7 +101,10 @@ window.findNQueensSolution = function(n) {
     }
   };
   rooks(board, n, 0);
-
+  if (solution[0] === undefined) {
+    console.log('Single solution for ' + n + ' queens:', '0');
+    return board;
+  }
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution[0]));
   return solution[0];
 };
@@ -105,8 +117,11 @@ window.countNQueensSolutions = function(n) {
 
   var rooks = function (board, rooksLeft, rowIndex) {
     if (rowIndex === n ) {
-      var answer = board.slice();
-      solution.push(answer);
+      if (!(boardObj.hasAnyRowConflicts() || boardObj.hasAnyColConflicts() || boardObj.hasAnyMajorDiagonalConflicts() || boardObj.hasAnyMinorDiagonalConflicts())) {
+        var answer = board.slice();
+        solution.push(answer);
+        return; 
+      }
     } else {
       for (var i = 0; i < board.length; i++) {
         //var tempBoard = board.slice();
